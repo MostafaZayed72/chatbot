@@ -43,15 +43,6 @@
               >{{ color }}</span>
             </td>
             <td>
-              <a
-                v-if="product.product_url"
-                :href="product.product_url"
-                target="_blank"
-                class="text-primary truncate-link"
-              >{{ product.product_url }}</a>
-              <span v-else>-</span>
-            </td>
-            <td>
               <button @click="openModal(product)" class="action-btn text-primary">Edit</button>
               <button @click="deleteProduct(product.id)" class="action-btn text-danger">Delete</button>
             </td>
