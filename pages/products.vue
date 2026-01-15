@@ -2,9 +2,7 @@
   <div>
     <div class="flex justify-between items-center mb-4">
       <h1 class="title">Products</h1>
-      <button @click="openModal()" class="btn">
-        + Add Product
-      </button>
+      <button @click="openModal()" class="btn">+ Add Product</button>
     </div>
 
     <!-- Data Table -->
@@ -18,13 +16,19 @@
             <th>Wholesale</th>
             <th>Qty</th>
             <th>Colors</th>
+            <th>Product URL</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="product in products" :key="product.id">
             <td>
-              <img v-if="product.image_url" :src="product.image_url" alt="Product" class="product-thumb" />
+              <img
+                v-if="product.image_url"
+                :src="product.image_url"
+                alt="Product"
+                class="product-thumb"
+              />
               <div v-else class="no-img">No Img</div>
             </td>
             <td>{{ product.name }}</td>
@@ -32,7 +36,21 @@
             <td>{{ product.wholesale_price }}</td>
             <td>{{ product.available_quantity }}</td>
             <td>
-              <span v-for="color in product.available_colors" :key="color" class="badge" :style="{ marginRight: '4px' }">{{ color }}</span>
+              <span
+                v-for="color in product.available_colors"
+                :key="color"
+                class="badge"
+                :style="{ marginRight: '4px' }"
+              >{{ color }}</span>
+            </td>
+            <td>
+              <a
+                v-if="product.product_url"
+                :href="product.product_url"
+                target="_blank"
+                class="text-primary truncate-link"
+              >{{ product.product_url }}</a>
+              <span v-else>-</span>
             </td>
             <td>
               <button @click="openModal(product)" class="action-btn text-primary">Edit</button>
@@ -71,7 +89,7 @@
             <label>Quantity</label>
             <input v-model="form.available_quantity" type="number" class="input" />
           </div>
-           <div class="form-group">
+          <div class="form-group">
             <label>Colors (comma separated)</label>
             <input v-model="form.colors_input" class="input" placeholder="Red, Blue, Green" />
           </div>
@@ -80,15 +98,21 @@
             <input v-model="form.image_url" class="input" placeholder="https://..." />
           </div>
           <div class="form-group full-width">
+            <label>Product URL</label>
+            <input v-model="form.product_url" class="input" placeholder="https://..." />
+          </div>
+          <div class="form-group full-width">
             <label>Description</label>
             <textarea v-model="form.description" class="input" rows="3"></textarea>
           </div>
-          
+
           <div class="modal-actions full-width flex gap-4 mt-4">
-             <button type="button" @click="showModal = false" class="btn btn-secondary flex-1">Cancel</button>
-             <button type="submit" class="btn flex-1" :disabled="saving">
-               {{ saving ? 'Saving...' : 'Save' }}
-             </button>
+            <button type="button" @click="showModal = false" class="btn btn-secondary flex-1">Cancel</button>
+            <button
+              type="submit"
+              class="btn flex-1"
+              :disabled="saving"
+            >{{ saving ? 'Saving...' : 'Save' }}</button>
           </div>
         </form>
       </div>
@@ -111,21 +135,22 @@ const form = ref({
   available_quantity: 0,
   colors_input: '',
   image_url: '',
+  product_url: '',
   description: ''
 })
 
 const openModal = (product = null) => {
   if (product) {
     isEditing.value = true
-    form.value = { 
-      ...product, 
+    form.value = {
+      ...product,
       colors_input: product.available_colors ? product.available_colors.join(', ') : ''
     }
   } else {
     isEditing.value = false
     form.value = {
-      name: '', price: 0, wholesale_price: 0, profit_margin: 0, 
-      available_quantity: 0, colors_input: '', image_url: '', description: ''
+      name: '', price: 0, wholesale_price: 0, profit_margin: 0,
+      available_quantity: 0, colors_input: '', image_url: '', product_url: '', description: ''
     }
   }
   showModal.value = true
@@ -139,7 +164,7 @@ const saveProduct = async () => {
       available_colors: form.value.colors_input.split(',').map(c => c.trim()).filter(Boolean)
     }
     delete payload.colors_input
-    
+
     if (isEditing.value) {
       await $fetch(`/api/products/${form.value.id}`, { method: 'PUT', body: payload })
     } else {
@@ -190,13 +215,18 @@ const deleteProduct = async (id) => {
   margin-right: 0.5rem;
   font-weight: 500;
 }
-.text-danger { color: var(--color-danger); }
+.text-danger {
+  color: var(--color-danger);
+}
 
 /* Modal */
 .modal-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.7);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -214,11 +244,22 @@ const deleteProduct = async (id) => {
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
-.full-width { grid-column: span 2; }
+.full-width {
+  grid-column: span 2;
+}
 label {
   display: block;
   margin-bottom: 0.25rem;
   font-size: 0.875rem;
   color: var(--color-text-muted);
+}
+
+.truncate-link {
+  display: inline-block;
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
 }
 </style>

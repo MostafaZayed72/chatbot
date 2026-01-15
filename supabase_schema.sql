@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS public.products (
     profit_margin NUMERIC,
     wholesale_price NUMERIC,
     image_url TEXT,
+    product_url TEXT,
     description TEXT,
     available_quantity INTEGER DEFAULT 0,
     available_colors TEXT[], -- Array of strings e.g. ['red', 'blue']
