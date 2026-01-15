@@ -16,7 +16,6 @@
             <th>Wholesale</th>
             <th>Qty</th>
             <th>Colors</th>
-            <th>Product URL</th>
             <th>Actions</th>
           </tr>
         </thead>
