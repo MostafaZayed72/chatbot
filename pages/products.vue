@@ -13,9 +13,7 @@
             <th>Image</th>
             <th>Name</th>
             <th>Price</th>
-            <th>Wholesale</th>
-            <th>Qty</th>
-            <th>Colors</th>
+            <th>Percentage</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -32,23 +30,14 @@
             </td>
             <td>{{ product.name }}</td>
             <td>{{ product.price }}</td>
-            <td>{{ product.wholesale_price }}</td>
-            <td>{{ product.available_quantity }}</td>
-            <td>
-              <span
-                v-for="color in product.available_colors"
-                :key="color"
-                class="badge"
-                :style="{ marginRight: '4px' }"
-              >{{ color }}</span>
-            </td>
+            <td>{{ product.profit_margin }}</td>
             <td>
               <button @click="openModal(product)" class="action-btn text-primary">Edit</button>
               <button @click="deleteProduct(product.id)" class="action-btn text-danger">Delete</button>
             </td>
           </tr>
           <tr v-if="!products?.length">
-            <td colspan="7" class="text-center p-4">No products found.</td>
+            <td colspan="5" class="text-center p-4">No products found.</td>
           </tr>
         </tbody>
       </table>
