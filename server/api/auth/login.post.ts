@@ -1,7 +1,7 @@
 export default defineEventHandler(async (event) => {
     const body = await readBody(event)
 
-    if (body.username === 'Mostafa' && body.password === 'Mostafa') {
+    if (body.username === 'Administrator' && body.password === 'Administrator') {
         setCookie(event, 'auth_token', 'valid-session', {
             maxAge: 60 * 60 * 24 * 7, // 7 days
             path: '/',
